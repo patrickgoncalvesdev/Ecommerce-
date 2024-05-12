@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load mytags %}
+{% load crispy_forms_tags %}
+<h1 class="h3 mb-2 text-gray-800">Solicitações de Saque</h1>
+<p class="mb-4">.</a>.</p>
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form action="" method="get">
+            <div class="row">
+                {% for field in filterset.form %}
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-square" type="submit">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Código(ultimos 10 digitos)</th>
+                        <th>Usuario</th>
+                        <th>Chave Pix</th>
+                        <th>Valor</th>
+                        <th>Data/Hora</th>
+                        {% if perms.ecommerce.bo_can_view_and_edit_awards %}
+                        <th>Ver prêmios do jogador</th>
+                        {% endif %}
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for withdraw_request in object_list %}
+                    <tr>
+                        <td>{{ withdraw_request.request_id|slice:"-10:" }}</td>
+                        <td>{{ withdraw_request.user.username }}</td>
+                        <td>{{ withdraw_request.pix_key }}</td>
+                        <td>
+                            R$ {{ withdraw_request.value }}
+                        </td>
+                        <td>
+                            {{ withdraw_request.created_at }}
+                        </td>
+                        {% if perms.ecommerce.bo_can_view_and_edit_awards %}
+                        <td>
+                            <a class="btn btn-primary btn-square" href="{% url 'player_awards' pk=withdraw_request.user.id %}">
+                                Ver Prêmios
+                            </a>
+                        </td>
+                        {% endif %}
+                        <td>
+                            {% if withdraw_request.status == "PENDING" %}
+                            <a class="btn btn-success btn-circle btn-sm" href="#" data-toggle="modal"
+                                data-target="#requestApprovalModal{{withdraw_request.id}}">
+                                <i class="fas fa-check"></i>
+
+                            </a>
+                            <a class="btn btn-danger btn-circle btn-sm" href="#" data-toggle="modal"
+                                data-target="#requestReprovalModal{{withdraw_request.id}}">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            {% endif %}
+                            <div class="modal fade" id="requestApprovalModal{{withdraw_request.id}}" tabindex="-1"
+                                role="dialog" aria-labelledby="requestAprovalModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="requestAprovalModalLabel">Tem certeza que deseja
+                                                aprovar a solicitação de saque?</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Valor: R${{withdraw_request.value}}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button"
+                                                data-dismiss="modal">Cancelar</button>
+                                            <a class="btn btn-success"
+                                                href="{% url 'withdraw_request_state_edit' pk=withdraw_request.id status='APPROVED' %}">Aprovar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="requestReprovalModal{{withdraw_request.id}}" tabindex="-1"
+                                role="dialog" aria-labelledby="requestReprovalModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="requestReprovalModalLabel">Tem certeza que
+                                                deseja
+                                                reprovar a solicitação de saque?</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Valor: R${{withdraw_request.value}}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button"
+                                                data-dismiss="modal">Cancelar</button>
+                                            <a class="btn btn-danger"
+                                                href="{% url 'withdraw_request_state_edit' pk=withdraw_request.id status='CANCELED' %}">Reprovar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.previous_page_number %}">
+                            {{ page_obj.previous_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.next_page_number %}">
+                            {{page_obj.next_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

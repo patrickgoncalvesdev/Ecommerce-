@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load mytags %}
+{% load crispy_forms_tags %}
+<h1 class="h3 mb-2 text-gray-800">Bilhetes</h1>
+<p class="mb-4">Listagem de Bilhetes.</a>.</p>
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form action="" method="get">
+            <div class="row">
+                {% for field in filterset.form %}
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-square" type="submit">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Afiliado/Jogador</th>
+                        <th>Bilhete</th>
+                        <th>Loteria</th>
+                        <th>Colocação</th>
+                        <th>Valor da aposta</th>
+                        <th>Valor do prêmio</th>
+                        <th>Data/Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for award in object_list %}
+                    <tr>
+                        <td>{{ award.hash }}</td>
+                        <td>{{ award.user.username }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-square" href="#" data-toggle="modal"
+                                data-target="#detailModal{{ player.id }}">
+                                Detalhes
+                            </a>
+                            <div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
+                                aria-labelledby="detailModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="detailModalLabel">Bilhete {{award.hash}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Vendedor: {{ award.seller }}</p>
+                                            <p>{{ award.lottery_draw }}</p>
+                                            <p>{{award.modality}} - {{award.placing}}:</p>
+                                            {{ award.bets.all|length }} Apostas
+                                            <p>
+                                                {% for bet in award.bets.all %}
+                                                <span class="badge badge-secondary">{{ bet.guess }}</span>
+                                                {% endfor %}
+                                            </p>
+                                            <p>R$ {{award.get_value_per_bet}} / {{award.get_type_display}}</p>
+                                            <p>Total: R$ {{award.value_total}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ award.lotery_key }}</td>
+                        <td>{{ award.placing.name }}</td>
+                        <td>R$ {{ award.value_total }}</td>
+                        <td>R$ {{ award.cashout }}</td>
+                        <td>
+                            {{ award.lottery_draw.date }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.previous_page_number %}">
+                            {{ page_obj.previous_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.next_page_number %}">
+                            {{page_obj.next_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

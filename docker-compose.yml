@@ -1,0 +1,56 @@
+services:
+  db:
+    container_name: db
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=jb_ecommerce
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
+    container_name: web
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "8052:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./static:/static
+      - ./media/game_images:/media/game_images
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+  redis_insight:
+    container_name: redis_insight
+    image: redislabs/redisinsight:latest
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis

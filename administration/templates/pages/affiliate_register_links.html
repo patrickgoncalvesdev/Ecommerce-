@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load mytags %}
+{% load crispy_forms_tags %}
+<h1 class="h3 mb-2 text-gray-800">Seus Links de registro de afiliado</h1>
+<p class="mb-4">Listagem e administração links de registro de afiliados.</a>.</p>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form action="" method="get">
+            <div class="row">
+                {% for field in filterset.form %}
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-square" type="submit">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="mb-3 text-right">
+            <a class="btn btn-success" href="{% url 'new_affiliate_register_link' %}">Novo Link</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Gerente</th>
+                        <th>Registros</th>
+                        <th>Máximo de registros</th>
+                        <th>Criado em</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for register_instance in object_list %}
+                    <tr>
+                        <td>{{ register_instance.manager.username }}</td>
+                        <td>
+                            {{ register_instance.registrations }}
+                        </td>
+                        <td>
+                            {{ register_instance.max_registrations }}
+                        </td>
+                        <td>
+                            {{ register_instance.created_at }}
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-square" href="#" data-toggle="modal"
+                                data-target="#linkModal{{ affiliate.id }}">
+                                Visualizar Link
+                            </a>
+                            <div class="modal fade" id="linkModal{{ affiliate.id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="linkModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" style="text-align: center;">
+                                            <!-- Link para visualização (escondido) -->
+                                            <a id="affiliateLink" style="display: none;"
+                                                href="{% url 'affiliate_register_with_code' %}?code={{register_instance.code}}">
+                                                Link
+                                            </a>
+                                            <!-- Div onde o QR Code será renderizado, centralizado e ajustado em tamanho -->
+                                            <div id="qrcode" class="d-flex justify-content-center align-items-center"
+                                                style="height: 200px; width: 200px; margin: auto;"></div>
+                                            <!-- Botão para copiar o link, centralizado -->
+                                            <button class="btn btn-secondary" onclick="copyLink()"
+                                                style="margin-top: 20px;">Copiar Link</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.previous_page_number %}">
+                            {{ page_obj.previous_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.next_page_number %}">
+                            {{page_obj.next_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script>
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: document.getElementById("affiliateLink").href,
+        width: 128,
+        height: 128
+    });
+
+    function copyLink() {
+        var link = document.getElementById("affiliateLink").href;
+        navigator.clipboard.writeText(link).then(function () {
+            alert('Link copiado com sucesso!');
+        }, function (err) {
+            alert('Erro ao copiar o link: ', err);
+        });
+    }
+</script>
+{% endblock %}

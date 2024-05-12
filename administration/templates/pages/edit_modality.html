@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load mytags %}
+{% load crispy_forms_tags %}
+<h1 class="h3 mb-2 text-gray-800">{{object.name}}</h1>
+<p class="mb-4">Editar modalidade</a>.</p>
+
+<!-- Iniciando a área do formulário centralizado -->
+<div class="row justify-content-center">
+    <div class="col-xl-6 col-md-8 mb-4">
+        <!-- Substitua "action" pelo seu endpoint específico -->
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="text-center"> <!-- Botão centralizado -->
+                <button class="btn btn-primary" type="submit">Enviar</button>
+                <a class="btn btn-secondary" href="{% url 'modalities_configuration' %}">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

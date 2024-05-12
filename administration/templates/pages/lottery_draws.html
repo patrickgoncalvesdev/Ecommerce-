@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load mytags %}
+{% load crispy_forms_tags %}
+<h1 class="h3 mb-2 text-gray-800">Prêmios</h1>
+<p class="mb-4">Listagem de Prêmios.</a>.</p>
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form action="" method="get">
+            <div class="row">
+                {% for field in filterset.form %}
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-square" type="submit">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Loteria</th>
+                        <th>Bilhete</th>
+                        <th>Relatório de apostas</th>
+                        <th>Data/Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lottery_draw in object_list %}
+                    <tr>
+                        <td>{{ lottery_draw.id }}</td>
+                        <td>{{ lottery_draw.lottery }}</td>
+                        <td>
+                            <button class="btn btn-primary btn-square" data-target="#reModal{{ lottery_draw.id }}"
+                                data-toggle="modal" {% if not lottery_draw.results %}disabled{% endif %}>
+                                Resultados
+                            </button>
+                            <div class="modal fade" id="reModal{{ lottery_draw.id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="reModallLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="reModallLabel">Resultados</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for result in lottery_draw.get_typed_results %}
+                                            <p><span class="badge badge-secondary">{{forloop.counter}}º Prêmio</span>
+                                            </p>
+                                            <p>Resultado: {{ result.result }}</span>
+                                            </p>
+                                            <p>Animal: {{ result.animal }}</p>
+                                            <p>Grupo: {{ result.group_number }}</p>
+                                            <br />
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a class="btn btn-warning btn-square"
+                                href="{% url 'lottery_draw_report' pk=lottery_draw.id %}">
+                                Relatório
+                            </a>
+                        </td>
+                        <td>
+                            {{ lottery_draw.date }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.previous_page_number %}">
+                            {{ page_obj.previous_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.next_page_number %}">
+                            {{page_obj.next_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
