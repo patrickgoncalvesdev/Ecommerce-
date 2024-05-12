@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load mytags %}
+{% load crispy_forms_tags %}
+<h1 class="h3 mb-2 text-gray-800">Jogadores</h1>
+<p class="mb-4">Listagem de jogadores</a>.</p>
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form action="" method="get">
+            <div class="row">
+                {% for field in filterset.form %}
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-square" type="submit">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Jogador</th>
+                        <th>Afiliado</th>
+                        <th>Cotação</th>
+                        {% if perms.ecommerce.bo_can_edit_user_bonus %}
+                        <th>Bonus</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in object_list %}
+                    <tr>
+                        <td>{{ player.username }}</td>
+                        {% if player.associated_affiliate %}
+                        <td>{{ player.associated_affiliate.username }}</td>
+                        {% else %}
+                        <td>Não possui afiliado</td>
+                        {% endif %}
+                        <td>
+                            {{ player.quotation }}
+                        </td>
+                        {% if perms.ecommerce.bo_can_edit_user_bonus %}
+                        <td>
+                            <a class="btn btn-primary btn-square" href="#" data-toggle="modal"
+                                data-target="#bonusModal{{ player.id }}">
+                                Editar Saldo Bonus
+                            </a>
+                            <div class="modal fade" id="bonusModal{{ player.id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Editar Saldo Bonus do Jogador
+                                            </h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Saldo atual: R$ {{ player.wallet.bonus }}</p>
+                                            <form id="edit-bonus-form" action="{% url 'player_bonus' pk=player.id %}"
+                                                method="post">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="bonusValue">Novo Saldo (R$):</label>
+                                                    <input type="text" class="form-control" id="bonusValue"
+                                                        name="bonusValue" required>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary" type="button"
+                                                        data-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Salvar
+                                                        Alterações</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.previous_page_number %}">
+                            {{ page_obj.previous_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.next_page_number %}">
+                            {{page_obj.next_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

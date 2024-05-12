@@ -1,0 +1,814 @@
+[
+    {
+        "object": "Placing",
+        "action": "create",
+        "data": [
+            {
+                "name": "1 PRÊMIO",
+                "award_range": "0,1"
+            },
+            {
+                "name": "2 PRÊMIO",
+                "award_range": "1,2"
+            },
+            {
+                "name": "3 PRÊMIO",
+                "award_range": "2,3"
+            },
+            {
+                "name": "4 PRÊMIO",
+                "award_range": "3,4"
+            },
+            {
+                "name": "5 PRÊMIO",
+                "award_range": "4,5"
+            },
+            {
+                "name": "6 PRÊMIO",
+                "award_range": "5,6"
+            },
+            {
+                "name": "7 PRÊMIO",
+                "award_range": "6,7"
+            },
+            {
+                "name": "1/2 PRÊMIO",
+                "award_range": "0,2"
+            },
+            {
+                "name": "1/3 PRÊMIO",
+                "award_range": "0,3"
+            },
+            {
+                "name": "1/4 PRÊMIO",
+                "award_range": "0,4"
+            },
+            {
+                "name": "1/5 PRÊMIO",
+                "award_range": "0,5"
+            },
+            {
+                "name": "1/6 PRÊMIO",
+                "award_range": "0,6"
+            },
+            {
+                "name": "1/7 PRÊMIO",
+                "award_range": "0,7"
+            }
+        ]
+    },
+    {
+        "object": "Quotation",
+        "action": "create",
+        "data": [
+            {
+                "name": "800/1"
+            },
+            {
+                "name": "700/1"
+            },
+            {
+                "name": "600/1"
+            }
+        ]
+    },
+    {
+        "object": "FirstDeposit",
+        "action": "create",
+        "data": {}
+    },
+    {
+        "object": "AffiliateConfig",
+        "action": "create",
+        "data": {
+            "quotation": {
+                "object": "Quotation",
+                "action": "get",
+                "filter": {
+                    "name": "800/1"
+                }
+            }
+        }
+    },
+    {
+        "object": "Config",
+        "action": "create",
+        "data": {
+            "deposit": {
+                "object": "FirstDeposit",
+                "action": "get",
+                "filter": {}
+            },
+            "affiliate": {
+                "object": "AffiliateConfig",
+                "action": "get",
+                "filter": {}
+            }
+        }
+    },
+    {
+        "object": "MessagesTemplate",
+        "action": "create",
+        "data": {}
+    },
+    {
+        "object": "Modality",
+        "action": "create",
+        "data": [
+            {
+                "name": "CENTENA",
+                "max_len_input_guess": 3,
+                "min_len_input_guess": 3,
+                "max_guess_value": 0,
+                "max_bet_value": 500,
+                "placements": {
+                    "object": "Placing",
+                    "action": "filter",
+                    "filter": {}
+                }
+            },
+            {
+                "name": "GRUPO",
+                "max_len_input_guess": 2,
+                "min_len_input_guess": 2,
+                "max_guess_value": 25,
+                "max_bet_value": 500,
+                "placements": {
+                    "object": "Placing",
+                    "action": "filter",
+                    "filter": {}
+                }
+            },
+            {
+                "name": "UNIDADE",
+                "max_len_input_guess": 1,
+                "min_len_input_guess": 1,
+                "max_guess_value": 9,
+                "max_bet_value": 500,
+                "placements": {
+                    "object": "Placing",
+                    "action": "filter",
+                    "filter": {}
+                }
+            },
+            {
+                "name": "DEZENA",
+                "max_len_input_guess": 2,
+                "min_len_input_guess": 2,
+                "max_guess_value": 0,
+                "max_bet_value": 500,
+                "placements": {
+                    "object": "Placing",
+                    "action": "filter",
+                    "filter": {}
+                }
+            },
+            {
+                "name": "MILHAR",
+                "max_len_input_guess": 4,
+                "min_len_input_guess": 4,
+                "max_guess_value": 0,
+                "max_bet_value": 500,
+                "placements": {
+                    "object": "Placing",
+                    "action": "filter",
+                    "filter": {}
+                }
+            },
+            {
+                "name": "CENTENA INV",
+                "max_len_input_guess": 8,
+                "min_len_input_guess": 3,
+                "max_guess_value": 0,
+                "max_bet_value": 500,
+                "placements": {
+                    "object": "Placing",
+                    "action": "filter",
+                    "filter": {}
+                },
+                "ref": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "CENTENA"
+                    }
+                }
+            },
+            {
+                "name": "MILHAR INV",
+                "max_len_input_guess": 10,
+                "min_len_input_guess": 4,
+                "max_guess_value": 0,
+                "max_bet_value": 500,
+                "placements": {
+                    "object": "Placing",
+                    "action": "filter",
+                    "filter": {}
+                },
+                "ref": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "MILHAR"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "object": "Lottery",
+        "action": "create",
+        "data": [
+            {
+                "lotery_key": "todos-os-resultados-deu-no-poste",
+                "name": "Jogo do Bicho Rio de Janeiro",
+                "modalities": {
+                    "object": "Modality",
+                    "action": "filter",
+                    "filter": {}
+                },
+                "automato_payload": [
+                    {
+                        "draws": [
+                            {
+                                "hour": 9,
+                                "name": "Sorteio das 9 horas"
+                            },
+                            {
+                                "hour": 11,
+                                "name": "Sorteio das 11 horas"
+                            },
+                            {
+                                "hour": 14,
+                                "name": "Sorteio das 14 horas"
+                            },
+                            {
+                                "hour": 16,
+                                "name": "Sorteio das 16 horas"
+                            },
+                            {
+                                "hour": 18,
+                                "name": "Sorteio das 18 horas"
+                            },
+                            {
+                                "hour": 21,
+                                "name": "Sorteio das 21 horas"
+                            }
+                        ],
+                        "weekday": 0
+                    },
+                    {
+                        "draws": [
+                            {
+                                "hour": 9,
+                                "name": "Sorteio das 9 horas"
+                            },
+                            {
+                                "hour": 11,
+                                "name": "Sorteio das 11 horas"
+                            },
+                            {
+                                "hour": 14,
+                                "name": "Sorteio das 14 horas"
+                            },
+                            {
+                                "hour": 16,
+                                "name": "Sorteio das 16 horas"
+                            },
+                            {
+                                "hour": 18,
+                                "name": "Sorteio das 18 horas"
+                            },
+                            {
+                                "hour": 21,
+                                "name": "Sorteio das 21 horas"
+                            }
+                        ],
+                        "weekday": 1
+                    },
+                    {
+                        "draws": [
+                            {
+                                "hour": 9,
+                                "name": "Sorteio das 9 horas"
+                            },
+                            {
+                                "hour": 11,
+                                "name": "Sorteio das 11 horas"
+                            },
+                            {
+                                "hour": 14,
+                                "name": "Sorteio das 14 horas"
+                            },
+                            {
+                                "hour": 16,
+                                "name": "Sorteio das 16 horas"
+                            },
+                            {
+                                "hour": 21,
+                                "name": "Sorteio das 21 horas"
+                            }
+                        ],
+                        "weekday": 2
+                    },
+                    {
+                        "draws": [
+                            {
+                                "hour": 9,
+                                "name": "Sorteio das 9 horas"
+                            },
+                            {
+                                "hour": 11,
+                                "name": "Sorteio das 11 horas"
+                            },
+                            {
+                                "hour": 14,
+                                "name": "Sorteio das 14 horas"
+                            },
+                            {
+                                "hour": 16,
+                                "name": "Sorteio das 16 horas"
+                            },
+                            {
+                                "hour": 18,
+                                "name": "Sorteio das 18 horas"
+                            },
+                            {
+                                "hour": 21,
+                                "name": "Sorteio das 21 horas"
+                            }
+                        ],
+                        "weekday": 3
+                    },
+                    {
+                        "draws": [
+                            {
+                                "hour": 9,
+                                "name": "Sorteio das 9 horas"
+                            },
+                            {
+                                "hour": 11,
+                                "name": "Sorteio das 11 horas"
+                            },
+                            {
+                                "hour": 14,
+                                "name": "Sorteio das 14 horas"
+                            },
+                            {
+                                "hour": 16,
+                                "name": "Sorteio das 16 horas"
+                            },
+                            {
+                                "hour": 18,
+                                "name": "Sorteio das 18 horas"
+                            },
+                            {
+                                "hour": 21,
+                                "name": "Sorteio das 21 horas"
+                            }
+                        ],
+                        "weekday": 4
+                    },
+                    {
+                        "draws": [
+                            {
+                                "hour": 9,
+                                "name": "Sorteio das 9 horas"
+                            },
+                            {
+                                "hour": 11,
+                                "name": "Sorteio das 11 horas"
+                            },
+                            {
+                                "hour": 14,
+                                "name": "Sorteio das 14 horas"
+                            },
+                            {
+                                "hour": 16,
+                                "name": "Sorteio das 16 horas"
+                            },
+                            {
+                                "hour": 21,
+                                "name": "Sorteio das 21 horas"
+                            }
+                        ],
+                        "weekday": 5
+                    },
+                    {
+                        "draws": [
+                            {
+                                "hour": 9,
+                                "name": "Sorteio das 9 horas"
+                            },
+                            {
+                                "hour": 11,
+                                "name": "Sorteio das 11 horas"
+                            },
+                            {
+                                "hour": 14,
+                                "name": "Sorteio das 14 horas"
+                            },
+                            {
+                                "hour": 16,
+                                "name": "Sorteio das 16 horas"
+                            }
+                        ],
+                        "weekday": 6
+                    }
+                ]
+            },
+            {
+                "lotery_key": "loteria-federal-jogo-do-bicho",
+                "name": "Federal Jogo do Bicho",
+                "modalities": {
+                    "object": "Modality",
+                    "action": "filter",
+                    "filter": {}
+                },
+                "automato_payload": [
+                    {
+                        "draws": [
+                            {
+                                "hour": 19,
+                                "name": "Sorteio Federal das 19 horas"
+                            }
+                        ],
+                        "weekday": 2
+                    },
+                    {
+                        "draws": [
+                            {
+                                "hour": 19,
+                                "name": "Sorteio Federal das 19 horas"
+                            }
+                        ],
+                        "weekday": 5
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "object": "QuotationModality",
+        "action": "create",
+        "data": [
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "UNIDADE"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "800/1"
+                    }
+                },
+                "multiplier": 8
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "GRUPO"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "800/1"
+                    }
+                },
+                "multiplier": 20
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "DEZENA"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "800/1"
+                    }
+                },
+                "multiplier": 80
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "CENTENA"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "800/1"
+                    }
+                },
+                "multiplier": 800
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "MILHAR"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "800/1"
+                    }
+                },
+                "multiplier": 7000
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "CENTENA INV"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "800/1"
+                    }
+                },
+                "multiplier": 800
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "MILHAR INV"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "800/1"
+                    }
+                },
+                "multiplier": 7000
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "UNIDADE"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "700/1"
+                    }
+                },
+                "multiplier": 7
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "GRUPO"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "700/1"
+                    }
+                },
+                "multiplier": 18
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "DEZENA"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "700/1"
+                    }
+                },
+                "multiplier": 70
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "CENTENA"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "700/1"
+                    }
+                },
+                "multiplier": 700
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "MILHAR"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "700/1"
+                    }
+                },
+                "multiplier": 6000
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "CENTENA INV"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "700/1"
+                    }
+                },
+                "multiplier": 700
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "MILHAR INV"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "700/1"
+                    }
+                },
+                "multiplier": 6000
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "UNIDADE"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "600/1"
+                    }
+                },
+                "multiplier": 6
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "GRUPO"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "600/1"
+                    }
+                },
+                "multiplier": 16
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "DEZENA"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "600/1"
+                    }
+                },
+                "multiplier": 60
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "CENTENA"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "600/1"
+                    }
+                },
+                "multiplier": 600
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "MILHAR"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "600/1"
+                    }
+                },
+                "multiplier": 5000
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "CENTENA INV"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "600/1"
+                    }
+                },
+                "multiplier": 600
+            },
+            {
+                "modality": {
+                    "object": "Modality",
+                    "action": "get",
+                    "filter": {
+                        "name": "MILHAR INV"
+                    }
+                },
+                "quotation": {
+                    "object": "Quotation",
+                    "action": "get",
+                    "filter": {
+                        "name": "600/1"
+                    }
+                },
+                "multiplier": 5000
+            }
+        ]
+    }
+]

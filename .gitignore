@@ -1,0 +1,6 @@
+/env
+.env
+*.pyc
+*.pyo
+*.pyd
+/data

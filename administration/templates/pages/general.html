@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load mytags %}
+{% load crispy_forms_tags %}
+<h1 class="h3 mb-2 text-gray-800">{% if users_profile %}{{users_profile}}{% else %} Usuários {% endif %}</h1>
+<p class="mb-4">Dados gerais {% if users_profile %}{{users_profile}}{% else %} Usuários {% endif %}</a>.</p>
+<div class="row">
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Entradas</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ in_values }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Saídas</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">R${{ out_values }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-secondary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Comissão
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">R${{ comission }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">R${{ total }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form action="" method="get">
+            <div class="row">
+                {% for field in filterset.form %}
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- Campo de data de início -->
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="start_date">Data de Início:</label>
+                        <input type="datetime-local" class="form-control" id="start_date" name="start_date"
+                            value="{{ start_date_str }}">
+                    </div>
+                </div>
+                <!-- Campo de data de término -->
+                <div class="col-6 col-md-3">
+                    <div class="form-group">
+                        <label for="end_date">Data de Término:</label>
+                        <input type="datetime-local" class="form-control" id="end_date" name="end_date"
+                            value="{{ end_date_str }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-square" type="submit">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="card shadow mb-4">
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>{% if users_profile %}
+                            {{users_profile}}
+                            {% else %}
+                            Usuários
+                            {% endif %}</th>
+                        <th>Vendas</th>
+                        <th>Comissão</th>
+                        <th>Prêmios</th>
+                        <th>Total</th>
+                        <th>Atividade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in object_list %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td class="text-success">
+                            R$ {% call_with_date_range_filter user 'sells' start_date=start_date end_date=end_date %}
+                        </td>
+                        <td class="text-danger">R$ {% call_with_date_range_filter user 'commissions_with_my' start_date=start_date end_date=end_date %}</td>
+                        <td class="text-danger">R$ {% call_with_date_range_filter user 'awards' start_date=start_date end_date=end_date %}</td>
+                        <td class="{% if user.total >= 0 %} text-primary {% else %} text-danger {% endif %}">
+                            R$ {% call_with_date_range_filter user 'total_with_my' start_date=start_date end_date=end_date %}
+                        </td>
+                        <td>{% if user.last_login %} {{ user.last_login }} {% else %} Nunca {% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.previous_page_number %}">
+                            {{ page_obj.previous_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% add_query_params request page=page_obj.next_page_number %}">
+                            {{page_obj.next_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
